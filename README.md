@@ -1,0 +1,1 @@
+Smart Home Controller is a school project where I’m building a Qt-based app to control smart home devices. The plan is to make it easy to adjust things like lights, temperature, and security from one place.
