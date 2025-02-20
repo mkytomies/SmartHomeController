@@ -14,6 +14,9 @@ Window {
     property double temperature: 0
     property double windSpeed: 0
 
+    property bool toggleMusic: false
+    property string musicControlIcon: "play_arrow.png"
+
 
     visible: true
     title: "SmartHomeController"
@@ -132,6 +135,53 @@ Window {
                     color: "#757575"
                     opacity: 0.7
                     radius: 10
+
+                    Column {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: 350
+                        height: 100
+                        Column {
+                            x: 20
+                            y: 20
+                            Text {
+                                color: "White"
+                                font.bold: true
+                                text: "Song title"
+                            }
+                            Text {
+                                color: "White"
+                                text: "Artist"
+                            }
+                        }
+
+                        Row {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.bottom: parent.bottom
+                            Image {
+                                id: previous
+                                width: 24
+                                height: 24
+                                source: "skip_previous.png"
+                            }
+                            Image {
+                                id: pauseAndPlay
+                                width: 24
+                                height: 24
+                                source: musicControlIcon
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onPressed: musicControls()
+                                }
+                            }
+                            Image {
+                                id: next
+                                width: 24
+                                height: 24
+                                source: "skip_next.png"
+                            }
+                        }
+                    }
                 }
             }
             Rectangle {
@@ -235,6 +285,16 @@ Window {
             }
         }
         httpRequest.send();
+    }
+
+    function musicControls() {
+        toggleMusic = !toggleMusic
+        if(toggleMusic) {
+            musicControlIcon = "pause.png"
+        }
+        else {
+            musicControlIcon = "play_arrow.png"
+        }
     }
 
 }
