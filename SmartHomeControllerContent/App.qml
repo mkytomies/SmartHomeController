@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: LicenseRef-Qt-Commercial OR GPL-3.0-only
 
 import QtQuick
+import QtQuick.Controls 2.15
 import SmartHomeController
 
 Window {
@@ -9,7 +10,6 @@ Window {
     height: 800
     color: "#222020"
 
-    property string city: "Haetaan säätietoja..."
     property string weatherIcon: "..."
     property double temperature: 0
     property double windSpeed: 0
@@ -46,15 +46,24 @@ Window {
                     anchors.right: parent.right
                     width: 50
                     height: 50
-                    color: "Red"
+                    color: "#222020"
 
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: openMenu()
+                    Image {
+                        id: menuIcon
+                        anchors.centerIn: parent
+                        width: 24
+                        height: 24
+                        source: "menu.png"
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: openMenu()
+                        }
                     }
                 }
             }
         }
+
 
         Row {
             id: topRow
@@ -62,9 +71,11 @@ Window {
             width: 1100
             height: 400
             spacing: 30
+
             Column {
                 width: 350
                 spacing: 20
+
                 Rectangle {
                     id: weatherData
                     width: 350
@@ -184,14 +195,28 @@ Window {
                     }
                 }
             }
+
             Rectangle {
+                id: mainView
                 width: 720
                 height: 400
                 color: "#757575"
                 opacity: 0.7
                 radius: 10
+
+                Loader {
+                    anchors.fill: parent
+                    id: mainViewLoader
+                    source: "LightingView.qml"
+                }
             }
         }
+
+
+
+
+
+
 
         Row {
             id: bottomRow
@@ -200,37 +225,41 @@ Window {
             height: 215
             spacing: 30
             Rectangle {
+
                 width: 350
                 height: 215
                 color: "#757575"
                 opacity: 0.7
                 radius: 10
             }
-            Row {
-                spacing: 15
-                Rectangle {
-                    width: 230
-                    height: 215
-                    color: "#757575"
-                    opacity: 0.7
-                    radius: 10
+
+            Repeater {
+                model: ListModel {
+                    ListElement { name: "Lighting"; source: "LightingView.qml" }
+                    ListElement { name: "Air Conditioner"; source: "ACView.qml" }
+                    ListElement { name: "Security"; source: "SecurityView.qml" }
                 }
-                Rectangle {
-                    width: 230
+
+                delegate: Rectangle {
+                    id: rec1
+                    width: 720 / 3 - 20
                     height: 215
                     color: "#757575"
                     opacity: 0.7
                     radius: 10
-                }
-                Rectangle {
-                    width: 230
-                    height: 215
-                    color: "#757575"
-                    opacity: 0.7
-                    radius: 10
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            var tempSource = mainViewLoader.source
+                            mainViewLoader.source = model.source
+                            model.setProperty(index, "source", tempSource)
+                        }
+                    }
                 }
             }
         }
+
     }
 
     Rectangle {
@@ -239,17 +268,27 @@ Window {
         height: 800
         anchors.right: parent.right
         visible: false
+        color: "#222020"
+
         Column {
             anchors.fill: menu
             Rectangle {
+                anchors.right: parent.right
                 width: 50
                 height: 50
-                color: "Red"
-                anchors.right: parent.right
+                color: "#222020"
 
-                MouseArea {
-                    anchors.fill: parent
-                    onClicked: closeMenu()
+                Image {
+                    id: closeIcon
+                    anchors.centerIn: parent
+                    width: 24
+                    height: 24
+                    source: "close.png"
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: closeMenu()
+                    }
                 }
             }
         }
@@ -274,7 +313,6 @@ Window {
             if(httpRequest.readyState === XMLHttpRequest.DONE) {
                 if(httpRequest.status === 200) {
                     const response = JSON.parse(httpRequest.responseText);
-                    city = response.name
                     weatherIcon = response.weather[0].icon
                     temperature = response.main.temp
                     windSpeed = response.wind.speed
