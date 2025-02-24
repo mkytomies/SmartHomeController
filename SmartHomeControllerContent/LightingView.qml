@@ -1,10 +1,13 @@
 import QtQuick
 import QtQuick.Controls
 
+import "components"
+
 Rectangle {
     width: 720
     height: 400
-    opacity: 0.7
+    color: "#757575"
+    opacity: 1
     radius: 10
 
     Row {

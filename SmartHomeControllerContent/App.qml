@@ -104,7 +104,7 @@ Window {
                                 y: 10
                                 width: 150
                                 height: 150
-                                source: "http://openweathermap.org/img/w/02n.png"
+                                source: "http://openweathermap.org/img/w/" + weatherIcon + ".png"
                             }
                             Row {
                                 anchors.bottom: parent.bottom
@@ -200,9 +200,8 @@ Window {
                 id: mainView
                 width: 720
                 height: 400
-                color: "#757575"
-                opacity: 0.7
                 radius: 10
+                color: "Transparent"
 
                 Loader {
                     anchors.fill: parent
@@ -303,7 +302,9 @@ Window {
     }
 
 
-    Component.onCompleted: fetchWeatherData()
+    Component.onCompleted: {
+        fetchWeatherData()
+    }
 
     function fetchWeatherData() {
         const url = "https://api.openweathermap.org/data/2.5/weather?q=helsinki&units=metric&appid=6c433438776b5be4ac86001dc88de74d"
