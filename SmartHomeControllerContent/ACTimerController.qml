@@ -24,6 +24,10 @@ Rectangle {
             color: "Transparent"
             border.color: "#979797"
             border.width: 3
+
+            Text {
+                text: "Timer"
+            }
         }
     }
 }

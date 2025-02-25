@@ -10,6 +10,8 @@ Rectangle {
     opacity: 1
     radius: 10
 
+    property string selectedSetting: "ACTemperatureController.qml"
+
     Text {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -26,7 +28,7 @@ Rectangle {
         active: true
         width: 260
         height: 245
-        source: "TemperatureController.qml"
+        source: selectedSetting
     }
 
     Row {
@@ -36,76 +38,39 @@ Rectangle {
         width: 260
         height: 55
 
-        Column {
-            id: fanButton
-            anchors.left: parent.left
-            width: parent.width / 3
-            height: parent.height
-
-            Image {
-                id: fanIcon
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 35
-                height: 35
-                source: "fan.png"
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                color: "White"
-                font.pixelSize: 14
-                text: "Fan"
+        Repeater {
+            model: ListModel {
+                ListElement { name: "Temperature"; image: "thermostat.png"; source: "ACTemperatureController.qml" }
+                ListElement { name: "Fan"; image: "fan.png"; source: "FanController.qml" }
+                ListElement { name: "Timer"; image: "clock.png"; source: "ACTimerController.qml" }
+                ListElement { name: "Mode"; image: "bright.png"; source: "ACModeController.qml" }
             }
 
-            MouseArea {
-                anchors.fill: parent
-                /*onClicked: {
+            delegate: Column {
+                width: parent.width / 3
+                height: parent.height
+                visible: selectedSetting !== model.source
 
-                }*/
-            }
-        }
+                Image {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    width: 35
+                    height: 35
+                    source: model.image
+                }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    color: "White"
+                    font.pixelSize: 14
+                    text: model.name
+                }
 
-        Column {
-            id: timerButton
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: parent.width / 3
-            height: parent.height
-
-            Image {
-                id: timerIcon
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 35
-                height: 35
-                source: "clock.png"
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                color: "White"
-                font.pixelSize: 14
-                text: "Timer"
-            }
-        }
-
-        Column {
-            id: modeButton
-            anchors.right: parent.right
-            width: parent.width / 3
-            height: parent.height
-
-            Image {
-                id: modeIcon
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 35
-                height: 35
-                source: "bright.png"
-            }
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottom: parent.bottom
-                color: "White"
-                font.pixelSize: 14
-                text: "Mode"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        selectedSetting = model.source
+                    }
+                }
             }
         }
     }
