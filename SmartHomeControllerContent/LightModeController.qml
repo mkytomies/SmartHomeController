@@ -13,6 +13,7 @@ Rectangle {
     ListModel {
         id: lightModeModel
 
+        ListElement { name: "Custom"; color: ""; brightness: 0 }
         ListElement { name: "Working"; color: "#FFD700"; brightness: 90 }
         ListElement { name: "Reading"; color: "#FFA500"; brightness: 80 }
         ListElement { name: "Watching TV"; color: "#FF4500"; brightness: 60 }
@@ -83,10 +84,15 @@ Rectangle {
         preferredHighlightEnd: 0.5
 
         onCurrentIndexChanged: {
-            lightColor.setColor(lightModeModel.get(modes.currentIndex).color)
-            brightnessController.value = parseInt(lightModeModel.get(modes.currentIndex).brightness)
+            lights.setProperty(selectedLight, "mode", lightModeModel.get(modes.currentIndex).name)
+            if(lights.get(selectedLight).mode !== "Custom") {
+                lightColor.setColor(lightModeModel.get(modes.currentIndex).color)
+                brightnessController.value = parseInt(lightModeModel.get(modes.currentIndex).brightness)
+            }
         }
     }
+
+    property alias modes: modes
 
     Rectangle {
         anchors.bottom: parent.bottom

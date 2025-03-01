@@ -68,12 +68,16 @@ Rectangle {
 
 
             LightModeController {
+                id: modeController
                 anchors.centerIn: parent
             }
         }
         Column {
             id: power
-            width: 40
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            width: 24
+            height: 24
             y: 20
 
             Image {
@@ -81,6 +85,20 @@ Rectangle {
                 width: 24
                 height: 24
                 source: "power.png"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(lights.get(selectedLight).status === "on") {
+                        lights.setProperty(selectedLight, "status", "off")
+                        lights.setProperty(selectedLight, "image", "lightbulb.png")
+                    }
+                    else {
+                        lights.setProperty(selectedLight, "status", "on")
+                        lights.setProperty(selectedLight, "image", "lightbulb-on.png")
+                    }
+                }
             }
         }
 
@@ -95,8 +113,17 @@ Rectangle {
             Repeater {
                 model: ListModel {
                     id: lights
-                    ListElement { Id: 0; name: "Light 1"; image: "lightbulb.png"; color: "#FFD700"; brightness: 90 }
-                    ListElement { Id: 1; name: "Light 2"; image: "lightbulb.png"; color: "#FFD700"; brightness: 90 }
+                    ListElement { Id: 0; name: "Light 1"; image: "lightbulb-on.png"; color: "#FFD700"; brightness: 90; mode: "Custom"; status: "on" }
+                    ListElement { Id: 1; name: "Light 2"; image: "lightbulb-on.png"; color: "#FFD700"; brightness: 90; mode: "Custom"; status: "on" }
+
+                    onDataChanged: {
+                        onDataChanged: {
+                            if (lights.get(selectedLight).mode === "Custom") {
+                                modeController.modes.currentIndex = 0
+                            }
+                        }
+
+                    }
                 }
 
                 delegate: Column {
@@ -123,7 +150,6 @@ Rectangle {
                             selectedLight = model.Id
                             lightColor.setColor(model.color)
                             brightnessController.value = model.brightness
-                            console.log(selectedLight)
                         }
                     }
                 }

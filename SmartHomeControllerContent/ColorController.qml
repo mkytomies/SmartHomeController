@@ -14,10 +14,8 @@ Control {
     function setColor(hexColor) {
         let rgb = hexToRgb(hexColor);
         let hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
-        console.log(selectedLight)
         lights.setProperty(selectedLight, "color", hexColor);
         innerCircle.color = hexColor
-        console.log(lights.get(selectedLight).color)
         colorWheelMouseArea.angle = hsv.hue;
     }
 
@@ -114,7 +112,12 @@ Control {
             }
 
             function updateIndicator() {
+                if(lights.get(selectedLight).mode !== "Custom") {
+                    lights.setProperty(selectedLight, "mode", "Custom")
+                }
+
                 colorcontroller.lightColor = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
+                innerCircle.color = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
             }
         }
 
