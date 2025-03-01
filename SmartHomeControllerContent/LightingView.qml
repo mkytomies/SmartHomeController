@@ -1,8 +1,6 @@
 import QtQuick
 import QtQuick.Controls
 
-import "components"
-
 Rectangle {
     width: 720
     height: 400
@@ -10,12 +8,15 @@ Rectangle {
     opacity: 1
     radius: 10
 
+    property int selectedLight: 0
+
     Row {
         anchors.fill: parent
         Column {
             id: colorAndBrightnes
+            anchors.left: parent.left
             width: 288
-            height: parent.height
+            height: parent.height - 55
 
             Text {
                 x: 20
@@ -24,8 +25,10 @@ Rectangle {
                 font.pixelSize: 24
                 text: "Lightning"
             }
-            LightColorController {
+            ColorController {
+                id: lightColor
                 anchors.centerIn: parent
+
             }
             Row {
                 anchors.bottom: parent.bottom
@@ -41,9 +44,10 @@ Rectangle {
                     source: "bright.png"
                 }
                 Slider {
+                    id: brightnessController
                     anchors.horizontalCenter: parent.horizontalCenter
                     from: 1
-                    value: 1
+                    value: lights.get(selectedLight).brightness
                     to: 100
                 }
                 Image {
@@ -57,37 +61,13 @@ Rectangle {
             }
         }
         Column {
-            id: lightImage
-            width: 144
-            height: parent.height
-
-            Image {
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 140
-                height: 265
-                source: "light.png"
-
-                Rectangle {
-                    anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    width: 50
-                    height: 50
-                    radius: width / 2
-                    opacity: 0.2
-
-                    color: LightColorController.controller.color
-                }
-            }
-
-
-        }
-        Column {
             id: lightMode
+            anchors.right: parent.right
             width: 248
-            height: parent.height
+            height: parent.height - 55
 
 
-            LightModeController{
+            LightModeController {
                 anchors.centerIn: parent
             }
         }
@@ -101,6 +81,52 @@ Rectangle {
                 width: 24
                 height: 24
                 source: "power.png"
+            }
+        }
+
+
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.margins: 10
+            width: 260
+            height: 55
+
+            Repeater {
+                model: ListModel {
+                    id: lights
+                    ListElement { Id: 0; name: "Light 1"; image: "lightbulb.png"; color: "#FFD700"; brightness: 90 }
+                    ListElement { Id: 1; name: "Light 2"; image: "lightbulb.png"; color: "#FFD700"; brightness: 90 }
+                }
+
+                delegate: Column {
+                    width: parent.width / 2
+                    height: parent.height
+
+                    Image {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        width: 35
+                        height: 35
+                        source: model.image
+                    }
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottom: parent.bottom
+                        color: "White"
+                        font.pixelSize: 14
+                        text: model.name
+                    }
+
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            selectedLight = model.Id
+                            lightColor.setColor(model.color)
+                            brightnessController.value = model.brightness
+                            console.log(selectedLight)
+                        }
+                    }
+                }
             }
         }
     }
