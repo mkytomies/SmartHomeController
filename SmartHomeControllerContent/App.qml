@@ -3,6 +3,7 @@
 
 import QtQuick
 import QtQuick.Controls 2.15
+import QtMultimedia
 import SmartHomeController
 
 Window {
@@ -221,15 +222,27 @@ Window {
             id: bottomRow
             anchors.horizontalCenter: parent.horizontalCenter
             width: 1100
-            height: 215
+            height: 197
             spacing: 30
             Rectangle {
-
                 width: 350
-                height: 215
-                color: "#757575"
+                height: 197
+                color: "Transparent"
                 opacity: 0.7
                 radius: 10
+
+                MediaPlayer {
+                    id: securityCamera
+                    audioOutput: AudioOutput {}
+                    videoOutput: videoOutput
+                    loops: MediaPlayer.Infinite
+                    source: "security-camera-placeholder.mp4"
+                }
+
+                VideoOutput {
+                    id: videoOutput
+                    anchors.fill: parent
+                }
             }
 
             Repeater {
@@ -240,9 +253,8 @@ Window {
                 }
 
                 delegate: Rectangle {
-                    id: rec1
                     width: 720 / 3 - 20
-                    height: 215
+                    height: 197
                     color: "#757575"
                     opacity: 0.7
                     radius: 10
@@ -304,6 +316,7 @@ Window {
 
     Component.onCompleted: {
         fetchWeatherData()
+        securityCamera.play()
     }
 
     function fetchWeatherData() {
