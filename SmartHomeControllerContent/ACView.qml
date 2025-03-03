@@ -5,11 +5,10 @@ Rectangle {
     width: 720
     height: 400
     radius: 10
-    opacity: 1
-    color: "#757575"
+    color: "#5c5b5b"
 
     property string selectedSetting: "ACTemperatureController.qml"
-    property bool fanStatus: true
+    property bool acStatus: true
 
     Row {
         width: parent.width
@@ -21,7 +20,7 @@ Rectangle {
             anchors.topMargin: 30
             anchors.leftMargin: 20
             font.pixelSize: 24
-            color: "White"
+            color: "white"
             text: "Air Conditioner"
         }
 
@@ -43,12 +42,7 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    if(fanStatus) {
-                        fanStatus = false
-                    }
-                    else {
-                        fanStatus = true
-                    }
+                    acStatus = !acStatus
                 }
             }
         }
@@ -57,10 +51,25 @@ Rectangle {
     Loader {
         id: selectedACSetting
         anchors.centerIn: parent
-        width: 260
+        width: 540
         height: 245
         active: true
         source: selectedSetting
+
+        onLoaded: {
+            if (selectedACSetting.item) {
+                if (selectedACSetting.item.hasOwnProperty("timerStarted")) {
+                    selectedACSetting.item.timerStarted.connect(function() {
+                        acStatus = true;
+                    });
+                }
+                if (selectedACSetting.item.hasOwnProperty("timerEnded")) {
+                    selectedACSetting.item.timerEnded.connect(function() {
+                        acStatus = false;
+                    });
+                }
+            }
+        }
     }
 
     Row {
@@ -94,7 +103,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     font.pixelSize: 14
-                    color: "White"
+                    color: "white"
                     text: model.name
                 }
 
@@ -112,8 +121,8 @@ Rectangle {
         id: overlay
         width: 720
         height: 400
-        visible: !fanStatus
+        visible: !acStatus
         opacity: 0.3
-        color: "Black"
+        color: "black"
     }
 }

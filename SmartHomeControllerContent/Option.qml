@@ -5,7 +5,6 @@ Item {
     width: 100
     height: 64
     antialiasing: true
-
     visible: PathView.onPath
     scale: PathView.itemScale
     z: PathView.itemZ
@@ -16,8 +15,7 @@ Item {
         id: gradientBackground
         width: parent.width
         height: parent.height
-        smooth: true
-        color: "Transparent"
+        color: "transparent"
     }
 
     transform: Rotation {
@@ -31,8 +29,8 @@ Item {
 
     Text {
         anchors.centerIn: parent
-        text: ""
         font.pixelSize: 16
         color: "white"
+        text: ""
     }
 }

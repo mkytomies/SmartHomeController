@@ -2,31 +2,54 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
-    id: temperatureController
-    width: 260
+    id: acModeController
+    width: 540
     height: 245
-    opacity: 1
-    color: "#757575"
+    color: "transparent"
 
-    Rectangle {
+    property string selectedMode: "Auto"
+
+    Row {
         anchors.centerIn: parent
-        width: 240
-        height: 240
-        radius: 120
-        color: "Transparent"
-        border.color: "#979797"
-        border.width: 5
-        Rectangle {
-            anchors.centerIn: parent
-            width: 220
-            height: 220
-            radius: 120
-            color: "Transparent"
-            border.color: "#979797"
-            border.width: 3
+        width: parent.width
+        height: 150
+        spacing: 10
 
-            Text {
-                text: "Mode"
+        Repeater {
+            model: ListModel {
+                ListElement { name: "Auto"; image: "auto.png" }
+                ListElement { name: "Cool"; image: "cool.png" }
+                ListElement { name: "Heat"; image: "heat.png" }
+                ListElement { name: "Dry"; image: "dry.png" }
+            }
+
+            delegate: Rectangle {
+                width: acModeController.width / 4 - 7.5
+                height: width
+                color: (selectedMode === model.name) ? "#769172" : "#979797"
+                radius: 10
+
+                Image {
+                    anchors.centerIn: parent
+                    width: 40
+                    height: 40
+                    source: model.image
+                }
+
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 25
+                    color: "white"
+                    text: model.name
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        selectedMode = model.name
+                    }
+                }
             }
         }
     }
