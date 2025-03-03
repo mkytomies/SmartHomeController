@@ -1,14 +1,11 @@
 import QtQuick
 import QtQuick.Controls
 
-import "components"
-
 Rectangle {
     width: 720
     height: 400
-    color: "#757575"
-    opacity: 1
     radius: 10
+    color: "#5c5b5b"
 
     property string selected: "ArmStatusController.qml"
 
@@ -17,16 +14,16 @@ Rectangle {
         anchors.left: parent.left
         anchors.topMargin: 30
         anchors.leftMargin: 20
-        color: "White"
         font.pixelSize: 24
+        color: "white"
         text: "Security"
     }
 
     Loader {
         anchors.centerIn: parent
-        active: true
         width: parent.width * 0.75
         height: 245
+        active: true
         source: selected
     }
 
@@ -56,8 +53,8 @@ Rectangle {
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
-                    color: "White"
                     font.pixelSize: 14
+                    color: "white"
                     text: model.name
                 }
 
