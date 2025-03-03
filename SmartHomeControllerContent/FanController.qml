@@ -5,8 +5,7 @@ Rectangle {
     id: fanController
     width: 260
     height: 245
-    opacity: 1
-    color: "#757575"
+    color: "#5c5b5b"
 
     property int fanSpeed: 0
     property int ringRadius: 110
@@ -18,7 +17,7 @@ Rectangle {
         radius: 120
         border.width: 5
         border.color: "#979797"
-        color: "Transparent"
+        color: "transparent"
 
         Rectangle {
             anchors.centerIn: parent
@@ -27,7 +26,7 @@ Rectangle {
             radius: 120
             border.width: 3
             border.color: "#979797"
-            color: "Transparent"
+            color: "transparent"
 
             Rectangle {
                 id: indicator
@@ -58,7 +57,7 @@ Rectangle {
         width: 155
         height: 60
         radius: 50
-        color: "#757575"
+        color: "#5c5b5b"
 
         Rectangle {
             id: minusButton

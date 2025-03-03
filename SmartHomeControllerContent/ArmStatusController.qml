@@ -5,7 +5,7 @@ Rectangle {
     id: armStatusController
     width: 540
     height: 245
-    color: "Transparent"
+    color: "transparent"
 
     property string selectedMode: "Disarm"
 
@@ -17,16 +17,16 @@ Rectangle {
 
         Repeater {
             model: ListModel {
-                ListElement { name: "Arm Away"; image: "away.png"; source: "LightingView.qml" }
-                ListElement { name: "Arm Stay"; image: "stay.png"; source: "ACView.qml" }
-                ListElement { name: "Disarm"; image: "disarm.png"; source: "SecurityView.qml" }
+                ListElement { name: "Arm Away"; image: "away.png"; }
+                ListElement { name: "Arm Stay"; image: "stay.png"; }
+                ListElement { name: "Disarm"; image: "disarm.png"; }
             }
 
             delegate: Rectangle {
                 width: armStatusController.width / 3 - 6.5
                 height: 150
-                color: (selectedMode === model.name) ? "#769172" : "#979797"
                 radius: 10
+                color: (selectedMode === model.name) ? "#769172" : "#979797"
 
                 Image {
                     anchors.centerIn: parent

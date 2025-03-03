@@ -5,7 +5,7 @@ Rectangle {
     id: root
     width: 250
     height: 300
-    color: "Transparent"
+    color: "transparent"
 
     property string selectedColor: ""
     property int selectedBrightness
@@ -17,13 +17,13 @@ Rectangle {
         ListElement { name: "Working"; color: "#FFD700"; brightness: 90 }
         ListElement { name: "Reading"; color: "#FFA500"; brightness: 80 }
         ListElement { name: "Watching TV"; color: "#FF4500"; brightness: 60 }
-        ListElement { name: "Night Time"; color: "#2E3B4E"; brightness: 20 }
-        ListElement { name: "Relaxing"; color: "#9370DB"; brightness: 50 }
+        ListElement { name: "Night Time"; color: "#0067ff"; brightness: 20 }
+        ListElement { name: "Relaxing"; color: "#6100ff"; brightness: 50 }
         ListElement { name: "Gaming"; color: "#00FFFF"; brightness: 75 }
-        ListElement { name: "Study Mode"; color: "#4682B4"; brightness: 85 }
-        ListElement { name: "Dinner Time"; color: "#FF6347"; brightness: 70 }
-        ListElement { name: "Meditation"; color: "#008000"; brightness: 40 }
-        ListElement { name: "Movie Night"; color: "#4B0082"; brightness: 30 }
+        ListElement { name: "Study Mode"; color: "#0088ff"; brightness: 85 }
+        ListElement { name: "Dinner Time"; color: "#ff1e00"; brightness: 70 }
+        ListElement { name: "Meditation"; color: "#07ff00"; brightness: 40 }
+        ListElement { name: "Movie Night"; color: "#9400ff"; brightness: 30 }
     }
 
     Rectangle {
@@ -32,8 +32,7 @@ Rectangle {
         width: root.width / 4
         height: 40
         z: 100
-        opacity: 0.7
-        color: "Transparent"
+        color: "transparent"
 
         Text {
             anchors.centerIn: parent
@@ -44,7 +43,6 @@ Rectangle {
 
         MouseArea {
             anchors.fill: parent
-            hoverEnabled: true
             onClicked: {
                 modes.decrementCurrentIndex()
             }
@@ -54,9 +52,9 @@ Rectangle {
     PathView {
         id: modes
         anchors.fill: parent
-        delegate: flipCardDelegate
         model: lightModeModel
         currentIndex: 0
+        delegate: option
 
         path: Path {
             startX: root.width/2
@@ -99,7 +97,6 @@ Rectangle {
         width: root.width
         height: 40
         z: 100
-        opacity: 0.7
         color: "Transparent"
 
         Text {
@@ -118,9 +115,9 @@ Rectangle {
     }
 
     Component {
-        id: flipCardDelegate
+        id: option
 
-        LightModeOption {
+        Option {
             id: wrapper
             width: 100
             height: 64
@@ -143,10 +140,10 @@ Rectangle {
 
             Text {
                 anchors.centerIn: parent
-                text: model.name
                 font.pixelSize: 20
                 font.bold: true
-                color: "White"
+                color: "white"
+                text: model.name
             }
         }
     }

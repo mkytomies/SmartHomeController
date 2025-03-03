@@ -6,15 +6,85 @@ Control {
     id: colorcontroller
     width: 175
     height: 175
+
     property real ringWidth: 25
     property real hsvValue: 1.0
     property real hsvSaturation: 1.0
-    property color lightColor: Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0)
+    property color lightColor: Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0)    
+
+    contentItem: Item {
+        implicitWidth: 175
+        implicitHeight: width
+
+        Image {
+            id: colorWheel
+            anchors.centerIn: parent
+            width: colorcontroller.width
+            height: width
+            source: "colorwheel.png"
+
+            Rectangle {
+                id: innerCircle
+                anchors.centerIn: parent
+                width: 60
+                height: 60
+                radius: 30
+                color: setColor(lights.get(selectedLight).color)
+            }
+
+            Rectangle {
+                id: indicator
+                width: colorcontroller.ringWidth * 0.8;
+                height: width
+                x: (parent.width - width) / 2
+                y: colorcontroller.ringWidth * 0.1
+                radius: width / 2
+                color: 'white'
+                border {
+                    width: colorWheelMouseArea.containsPress ? 3 : 1
+                    color: Qt.lighter(colorcontroller.lightColor)
+                    Behavior on width { NumberAnimation { duration: 50 } }
+                }
+                transform: Rotation {
+                    angle: colorWheelMouseArea.angle * 360
+                    origin.x: indicator.width/2
+                    origin.y: colorcontroller.availableHeight/2 - indicator.y
+                }
+            }
+        }
+
+        MouseArea {
+            id: colorWheelMouseArea
+            anchors.fill: parent
+
+            property real angle: Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5
+
+            onPressed: {
+                angle = Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5;
+                updateIndicator();
+            }
+
+            onPositionChanged: {
+                angle = Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5;
+                updateIndicator();
+            }
+
+            function updateIndicator() {
+                if(lights.get(selectedLight).mode !== "Custom") {
+                    lights.setProperty(selectedLight, "mode", "Custom")
+                }
+
+                colorcontroller.lightColor = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
+                innerCircle.color = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
+            }
+        }
+
+    }
 
     function setColor(hexColor) {
         let rgb = hexToRgb(hexColor);
         let hsv = rgbToHsv(rgb.r, rgb.g, rgb.b);
-        lights.setProperty(selectedLight, "color", hexColor);
+        lights.setProperty(selectedLight, "color", hexColor)
         innerCircle.color = hexColor
         colorWheelMouseArea.angle = hsv.hue;
     }
@@ -52,74 +122,5 @@ Control {
         }
 
         return { hue: h, saturation: s, value: v };
-    }
-
-    contentItem: Item {
-        implicitWidth: 175
-        implicitHeight: width
-
-        Image {
-            id: colorWheel
-            anchors.centerIn: parent
-            width: colorcontroller.width
-            height: width
-            source: "colorwheel.png"
-
-            Rectangle {
-                id: innerCircle
-                anchors.centerIn: parent
-                width: 60
-                height: 60
-                radius: 30
-                color: setColor(lights.get(selectedLight).color)
-            }
-
-            Rectangle {
-                id: indicator
-                x: (parent.width - width) / 2
-                y: colorcontroller.ringWidth * 0.1
-                width: colorcontroller.ringWidth * 0.8; height: width
-                radius: width / 2
-                color: 'white'
-                border {
-                    width: colorWheelMouseArea.containsPress ? 3 : 1
-                    color: Qt.lighter(colorcontroller.lightColor)
-                    Behavior on width { NumberAnimation { duration: 50 } }
-                }
-
-                transform: Rotation {
-                    angle: colorWheelMouseArea.angle * 360
-                    origin.x: indicator.width/2
-                    origin.y: colorcontroller.availableHeight/2 - indicator.y
-                }
-            }
-        }
-
-        MouseArea {
-            id: colorWheelMouseArea
-            anchors.fill: parent
-
-            property real angle: Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5
-
-            onPressed: {
-                angle = Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5;
-                updateIndicator();
-            }
-
-            onPositionChanged: {
-                angle = Math.atan2(width / 2 - mouseX, mouseY - height / 2) / 6.2831 + 0.5;
-                updateIndicator();
-            }
-
-            function updateIndicator() {
-                if(lights.get(selectedLight).mode !== "Custom") {
-                    lights.setProperty(selectedLight, "mode", "Custom")
-                }
-
-                colorcontroller.lightColor = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
-                innerCircle.color = Qt.hsva(colorWheelMouseArea.angle, 1.0, 1.0, 1.0);
-            }
-        }
-
     }
 }

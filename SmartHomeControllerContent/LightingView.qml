@@ -2,16 +2,17 @@ import QtQuick
 import QtQuick.Controls
 
 Rectangle {
+    id: lightingView
     width: 720
     height: 400
-    color: "#757575"
-    opacity: 1
     radius: 10
+    color: "#5c5b5b"
 
     property int selectedLight: 0
 
     Row {
         anchors.fill: parent
+
         Column {
             id: colorAndBrightnes
             anchors.left: parent.left
@@ -21,20 +22,22 @@ Rectangle {
             Text {
                 x: 20
                 y: 30
-                color: "White"
                 font.pixelSize: 24
+                color: "White"
                 text: "Lightning"
             }
+
             ColorController {
                 id: lightColor
                 anchors.centerIn: parent
-
             }
+
             Row {
                 anchors.bottom: parent.bottom
                 anchors.horizontalCenter: parent.horizontalCenter
                 width: 260
                 height: 50
+
                 Image {
                     id: bright
                     anchors.left: parent.left
@@ -43,6 +46,7 @@ Rectangle {
                     y: 6
                     source: "bright.png"
                 }
+
                 Slider {
                     id: brightnessController
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -50,6 +54,7 @@ Rectangle {
                     value: lights.get(selectedLight).brightness
                     to: 100
                 }
+
                 Image {
                     id: dark
                     anchors.right: parent.right
@@ -60,18 +65,19 @@ Rectangle {
                 }
             }
         }
+
         Column {
             id: lightMode
             anchors.right: parent.right
             width: 248
             height: parent.height - 55
 
-
             LightModeController {
                 id: modeController
                 anchors.centerIn: parent
             }
         }
+
         Column {
             id: power
             anchors.right: parent.right
@@ -102,7 +108,6 @@ Rectangle {
             }
         }
 
-
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
@@ -113,6 +118,7 @@ Rectangle {
             Repeater {
                 model: ListModel {
                     id: lights
+
                     ListElement { Id: 0; name: "Light 1"; image: "lightbulb-on.png"; color: "#FFD700"; brightness: 90; mode: "Custom"; status: "on" }
                     ListElement { Id: 1; name: "Light 2"; image: "lightbulb-on.png"; color: "#FFD700"; brightness: 90; mode: "Custom"; status: "on" }
 
@@ -122,7 +128,6 @@ Rectangle {
                                 modeController.modes.currentIndex = 0
                             }
                         }
-
                     }
                 }
 
@@ -136,11 +141,13 @@ Rectangle {
                         height: 35
                         source: model.image
                     }
+
                     Text {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
-                        color: "White"
                         font.pixelSize: 14
+                        font.bold: (selectedLight === model.Id ? true : false)
+                        color: "white"
                         text: model.name
                     }
 

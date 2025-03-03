@@ -11,60 +11,15 @@ Window {
     height: 800
     color: "#222020"
 
-    property string weatherIcon: "..."
-    property double temperature: 0
-    property double windSpeed: 0
+    visible: true
+    title: "SmartHomeController"
 
     property bool toggleMusic: false
     property string musicControlIcon: "play_arrow.png"
 
-
-    visible: true
-    title: "SmartHomeController"
-
-    property date currentDate: 01-01-2025
-
     Column {
         anchors.centerIn: parent
         spacing: 30
-
-        Rectangle {
-            id: topBar
-            width: 1100
-            height: 50
-            color: "#757575"
-
-            Row {
-                anchors.fill: topBar
-                Rectangle {
-                    id: roomNav
-                    anchors.left: parent.left
-                    width: 1050
-                    height: 50
-                }
-                Rectangle {
-                    id: hamburger
-                    anchors.right: parent.right
-                    width: 50
-                    height: 50
-                    color: "#222020"
-
-                    Image {
-                        id: menuIcon
-                        anchors.centerIn: parent
-                        width: 24
-                        height: 24
-                        source: "menu.png"
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: openMenu()
-                        }
-                    }
-                }
-            }
-        }
-
 
         Row {
             id: topRow
@@ -77,91 +32,33 @@ Window {
                 width: 350
                 spacing: 20
 
-                Rectangle {
-                    id: weatherData
-                    width: 350
-                    height: 260
-                    color: "#222020"
-                    opacity: 0.7
-                    Column {
-                        anchors.fill: weatherData
-                        spacing: 10
+                WeatherDisplay {}
 
-                        Text {
-                            id: todaysDate
-                            y: 10
-                            width: 200
-                            color: "White"
-                            font.pixelSize: 24
-                            text: Qt.formatDateTime(new Date(), "dd/MM/yyyy")
-                        }
-                        Row {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: todaysDate.bottom
-                            width: 260
-                            height: 210
-                            Image {
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                y: 10
-                                width: 150
-                                height: 150
-                                source: "http://openweathermap.org/img/w/" + weatherIcon + ".png"
-                            }
-                            Row {
-                                anchors.bottom: parent.bottom
-                                width: 260
-                                height: 130
-                                Text {
-                                    id: windSpeedText
-                                    anchors.bottom: parent.bottom
-                                    anchors.left: parent.left
-                                    color: "White"
-                                    font.pixelSize: 20
-                                    text: windSpeed +"m/s"
-                                }
-
-                                Rectangle {
-                                    anchors.right: parent.right
-                                    width: 130
-                                    height: 130
-                                    radius: 10
-                                    color: "#757575"
-                                    opacity: 60
-                                    Text {
-                                        anchors.centerIn: parent
-                                        color: "White"
-                                        font.pixelSize: 30
-                                        font.bold: true
-                                        text: temperature + "°C"
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
                 Rectangle {
                     id: musicPlayer
                     width: 350
                     height: 120
-                    color: "#757575"
-                    opacity: 0.7
                     radius: 10
+                    color: "#5c5b5b"
 
                     Column {
                         anchors.horizontalCenter: parent.horizontalCenter
                         width: 350
                         height: 100
+
                         Column {
-                            x: 20
-                            y: 20
+                            anchors.top: parent.top
+                            anchors.left: parent.left
+                            anchors.margins: 20
+
                             Text {
-                                color: "White"
                                 font.bold: true
+                                color: "white"
                                 text: "Song title"
                             }
+
                             Text {
-                                color: "White"
+                                color: "white"
                                 text: "Artist"
                             }
                         }
@@ -169,12 +66,14 @@ Window {
                         Row {
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.bottom: parent.bottom
+
                             Image {
                                 id: previous
                                 width: 24
                                 height: 24
                                 source: "skip_previous.png"
                             }
+
                             Image {
                                 id: pauseAndPlay
                                 width: 24
@@ -186,6 +85,7 @@ Window {
                                     onPressed: musicControls()
                                 }
                             }
+
                             Image {
                                 id: next
                                 width: 24
@@ -205,18 +105,12 @@ Window {
                 color: "Transparent"
 
                 Loader {
-                    anchors.fill: parent
                     id: mainViewLoader
+                    anchors.fill: parent
                     source: "LightingView.qml"
                 }
             }
         }
-
-
-
-
-
-
 
         Row {
             id: bottomRow
@@ -224,12 +118,12 @@ Window {
             width: 1100
             height: 197
             spacing: 30
+
             Rectangle {
                 width: 350
                 height: 197
-                color: "Transparent"
-                opacity: 0.7
                 radius: 10
+                color: "Transparent"
 
                 MediaPlayer {
                     id: securityCamera
@@ -247,96 +141,50 @@ Window {
 
             Repeater {
                 model: ListModel {
-                    ListElement { name: "Lighting"; source: "LightingView.qml" }
-                    ListElement { name: "Air Conditioner"; source: "ACView.qml" }
-                    ListElement { name: "Security"; source: "SecurityView.qml" }
+                    ListElement { name: "Lighting"; source: "LightingView.qml"; image: "lightbulb-on.png" }
+                    ListElement { name: "AC"; source: "ACView.qml"; image: "ac.png" }
+                    ListElement { name: "Security"; source: "SecurityView.qml"; image: "lock.png" }
                 }
 
                 delegate: Rectangle {
                     width: 720 / 3 - 20
                     height: 197
-                    color: "#757575"
-                    opacity: 0.7
                     radius: 10
+                    color: "#5c5b5b"
+
+                    Image {
+                        id: navImage
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: parent.top
+                        anchors.topMargin: 50
+                        width: 60
+                        height: 60
+                        source: model.image
+                    }
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.top: navImage.bottom
+                        anchors.topMargin: 10
+                        font.pixelSize: 20
+                        font.bold: true
+                        color: "white"
+                        text: model.name
+                    }
 
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            var tempSource = mainViewLoader.source
                             mainViewLoader.source = model.source
-                            model.setProperty(index, "source", tempSource)
                         }
                     }
                 }
             }
         }
-
     }
-
-    Rectangle {
-        id: menu
-        width: 480
-        height: 800
-        anchors.right: parent.right
-        visible: false
-        color: "#222020"
-
-        Column {
-            anchors.fill: menu
-            Rectangle {
-                anchors.right: parent.right
-                width: 50
-                height: 50
-                color: "#222020"
-
-                Image {
-                    id: closeIcon
-                    anchors.centerIn: parent
-                    width: 24
-                    height: 24
-                    source: "close.png"
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: closeMenu()
-                    }
-                }
-            }
-        }
-    }
-
-    function openMenu() {
-        menu.visible = true
-    }
-
-    function closeMenu() {
-        menu.visible = false
-    }
-
 
     Component.onCompleted: {
-        fetchWeatherData()
         securityCamera.play()
-    }
-
-    function fetchWeatherData() {
-        const url = "https://api.openweathermap.org/data/2.5/weather?q=helsinki&units=metric&appid=6c433438776b5be4ac86001dc88de74d"
-        const httpRequest = new XMLHttpRequest();
-        httpRequest.open("GET", url);
-        httpRequest.onreadystatechange = function() {
-            if(httpRequest.readyState === XMLHttpRequest.DONE) {
-                if(httpRequest.status === 200) {
-                    const response = JSON.parse(httpRequest.responseText);
-                    weatherIcon = response.weather[0].icon
-                    temperature = response.main.temp
-                    windSpeed = response.wind.speed
-                }
-            }
-            else {
-                city = "Virhe latauksessa..."
-            }
-        }
-        httpRequest.send();
     }
 
     function musicControls() {

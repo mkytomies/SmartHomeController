@@ -5,7 +5,6 @@ Control {
     id: temperatureController
     width: 260
     height: 260
-    opacity: 1
 
     property int temperature: 20
     property real ringRadius: 110
@@ -58,7 +57,7 @@ Control {
         width: 155
         height: 60
         radius: 50
-        color: "#757575"
+        color: "#5c5b5b"
 
         Rectangle {
             id: minusButton
