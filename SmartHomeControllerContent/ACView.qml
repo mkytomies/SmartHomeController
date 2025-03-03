@@ -1,33 +1,65 @@
 import QtQuick
 import QtQuick.Controls
 
-import "components"
-
 Rectangle {
     width: 720
     height: 400
-    color: "#757575"
-    opacity: 1
     radius: 10
+    opacity: 1
+    color: "#757575"
 
     property string selectedSetting: "ACTemperatureController.qml"
+    property bool fanStatus: true
 
-    Text {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.topMargin: 30
-        anchors.leftMargin: 20
-        color: "White"
-        font.pixelSize: 24
-        text: "Air Conditioner"
+    Row {
+        width: parent.width
+        height: 70
+
+        Text {
+            anchors.top: parent.top
+            anchors.left: parent.left
+            anchors.topMargin: 30
+            anchors.leftMargin: 20
+            font.pixelSize: 24
+            color: "White"
+            text: "Air Conditioner"
+        }
+
+        Column {
+            id: power
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            width: 24
+            height: 24
+            y: 20
+
+            Image {
+                id: powerIcon
+                width: 24
+                height: 24
+                source: "power.png"
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if(fanStatus) {
+                        fanStatus = false
+                    }
+                    else {
+                        fanStatus = true
+                    }
+                }
+            }
+        }
     }
 
     Loader {
         id: selectedACSetting
         anchors.centerIn: parent
-        active: true
         width: 260
         height: 245
+        active: true
         source: selectedSetting
     }
 
@@ -57,11 +89,12 @@ Rectangle {
                     height: 35
                     source: model.image
                 }
+
                 Text {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
-                    color: "White"
                     font.pixelSize: 14
+                    color: "White"
                     text: model.name
                 }
 
@@ -74,5 +107,13 @@ Rectangle {
             }
         }
     }
-}
 
+    Rectangle {
+        id: overlay
+        width: 720
+        height: 400
+        visible: !fanStatus
+        opacity: 0.3
+        color: "Black"
+    }
+}
