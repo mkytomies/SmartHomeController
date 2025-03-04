@@ -7,7 +7,6 @@ Rectangle {
     radius: 10
     color: "#5c5b5b"
 
-    property string selectedSetting: "ACTemperatureController.qml"
     property bool acStatus: true
 
     Row {
@@ -48,27 +47,40 @@ Rectangle {
         }
     }
 
-    Loader {
+    Rectangle {
         id: selectedACSetting
         anchors.centerIn: parent
         width: 540
         height: 245
-        active: true
-        source: selectedSetting
+        color: "transparent"
 
-        onLoaded: {
-            if (selectedACSetting.item) {
-                if (selectedACSetting.item.hasOwnProperty("timerStarted")) {
-                    selectedACSetting.item.timerStarted.connect(function() {
-                        acStatus = true;
-                    });
-                }
-                if (selectedACSetting.item.hasOwnProperty("timerEnded")) {
-                    selectedACSetting.item.timerEnded.connect(function() {
-                        acStatus = false;
-                    });
-                }
+        ACTemperatureController {
+            id: temperature
+            visible: true
+        }
+
+        FanController {
+            id: fan
+            visible: false
+        }
+
+        ACTimerController {
+            id: timer
+            visible: false
+
+            onVisibleChanged: {
+                timerStarted.connect(function() {
+                    acStatus = true
+                });
+                timerEnded.connect(function() {
+                    acStatus = false
+                });
             }
+        }
+
+        ACModeController {
+            id: mode
+            visible: false
         }
     }
 
@@ -76,7 +88,7 @@ Rectangle {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.margins: 10
-        width: 260
+        width: 300
         height: 55
 
         Repeater {
@@ -88,9 +100,8 @@ Rectangle {
             }
 
             delegate: Column {
-                width: parent.width / 3
+                width: parent.width / 4
                 height: parent.height
-                visible: selectedSetting !== model.source
 
                 Image {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -110,7 +121,10 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        selectedSetting = model.source
+                        temperature.visible = model.name.toLowerCase() === "temperature"
+                        fan.visible = model.name.toLowerCase() === "fan"
+                        timer.visible = model.name.toLowerCase() === "timer"
+                        mode.visible = model.name.toLowerCase() === "mode"
                     }
                 }
             }

@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: timerController
+    anchors.centerIn: parent
     width: 260
     height: 245
     color: "#5c5b5b"
@@ -52,13 +53,13 @@ Rectangle {
                     PathAttribute { name: "itemAngle"; value: -20.0; }
                     PathAttribute { name: "itemScale"; value: 0.8; }
                     PathLine { x: hours.width / 2; y: hours.height * 0.1; }
-                    PathPercent { value: 0.48; }
+                    PathPercent { value: 0.4; }
                     PathLine { x: hours.width / 2; y: hours.height * 0.5; }
                     PathAttribute { name: "itemAngle"; value: 0.0; }
                     PathAttribute { name: "itemScale"; value: 1.0; }
                     PathAttribute { name: "itemZ"; value: 100 }
                     PathLine { x: hours.width / 2; y: hours.height * 0.8; }
-                    PathPercent { value: 0.52; }
+                    PathPercent { value: 0.6; }
                     PathLine { x: hours.width / 2; y: hours.height * 0.8; }
                     PathAttribute { name: "itemAngle"; value: 20.0; }
                     PathAttribute { name: "itemScale"; value: 0.8; }
@@ -107,13 +108,13 @@ Rectangle {
                     PathAttribute { name: "itemAngle"; value: -20.0; }
                     PathAttribute { name: "itemScale"; value: 0.8; }
                     PathLine { x: minutes.width / 2; y: minutes.height * 0.1; }
-                    PathPercent { value: 0.48; }
+                    PathPercent { value: 0.4; }
                     PathLine { x: minutes.width / 2; y: minutes.height * 0.5; }
                     PathAttribute { name: "itemAngle"; value: 0.0; }
                     PathAttribute { name: "itemScale"; value: 1.0; }
                     PathAttribute { name: "itemZ"; value: 100 }
                     PathLine { x: minutes.width / 2; y: minutes.height * 0.8; }
-                    PathPercent { value: 0.52; }
+                    PathPercent { value: 0.6; }
                     PathLine { x: minutes.width / 2; y: minutes.height * 0.8; }
                     PathAttribute { name: "itemAngle"; value: 20.0; }
                     PathAttribute { name: "itemScale"; value: 0.8; }
@@ -215,7 +216,8 @@ Rectangle {
                     if (hoursPath.currentIndex > 0 && minutesPath.currentIndex === 0) {
                         minutesPath.currentIndex = 59;
                         hoursPath.currentIndex -= 1;
-                    } else {
+                    }
+                    else if(hoursPath.currentIndex === 0 && minutesPath.currentIndex === 0) {
                         timerStatus = false;
                         timerEnded()
                         minuteTimer.running = false;
