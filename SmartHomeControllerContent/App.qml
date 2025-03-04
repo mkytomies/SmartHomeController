@@ -14,9 +14,6 @@ Window {
     visible: true
     title: "SmartHomeController"
 
-    property bool toggleMusic: false
-    property string musicControlIcon: "play_arrow.png"
-
     Column {
         anchors.centerIn: parent
         spacing: 30
@@ -34,66 +31,8 @@ Window {
 
                 WeatherDisplay {}
 
-                Rectangle {
-                    id: musicPlayer
-                    width: 350
-                    height: 120
-                    radius: 10
-                    color: "#5c5b5b"
+                MusicPlayer {
 
-                    Column {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        width: 350
-                        height: 100
-
-                        Column {
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            anchors.margins: 20
-
-                            Text {
-                                font.bold: true
-                                color: "white"
-                                text: "Song title"
-                            }
-
-                            Text {
-                                color: "white"
-                                text: "Artist"
-                            }
-                        }
-
-                        Row {
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.bottom: parent.bottom
-
-                            Image {
-                                id: previous
-                                width: 24
-                                height: 24
-                                source: "skip_previous.png"
-                            }
-
-                            Image {
-                                id: pauseAndPlay
-                                width: 24
-                                height: 24
-                                source: musicControlIcon
-
-                                MouseArea {
-                                    anchors.fill: parent
-                                    onPressed: musicControls()
-                                }
-                            }
-
-                            Image {
-                                id: next
-                                width: 24
-                                height: 24
-                                source: "skip_next.png"
-                            }
-                        }
-                    }
                 }
             }
 
@@ -104,10 +43,19 @@ Window {
                 radius: 10
                 color: "Transparent"
 
-                Loader {
-                    id: mainViewLoader
-                    anchors.fill: parent
-                    source: "LightingView.qml"
+                LightingView {
+                    id: lights
+                    visible: true
+                }
+
+                ACView {
+                    id: ac
+                    visible: false
+                }
+
+                SecurityView {
+                    id: security
+                    visible: false
                 }
             }
         }
@@ -141,9 +89,9 @@ Window {
 
             Repeater {
                 model: ListModel {
-                    ListElement { name: "Lighting"; source: "LightingView.qml"; image: "lightbulb-on.png" }
-                    ListElement { name: "AC"; source: "ACView.qml"; image: "ac.png" }
-                    ListElement { name: "Security"; source: "SecurityView.qml"; image: "lock.png" }
+                    ListElement { Id: "lights"; name: "Lighting"; image: "lightbulb-on.png" }
+                    ListElement { Id: "ac"; name: "AC"; image: "ac.png" }
+                    ListElement { Id: "security"; name: "Security"; image: "lock.png" }
                 }
 
                 delegate: Rectangle {
@@ -175,7 +123,9 @@ Window {
                     MouseArea {
                         anchors.fill: parent
                         onClicked: {
-                            mainViewLoader.source = model.source
+                            lights.visible = model.Id === "lights"
+                            ac.visible = model.Id === "ac"
+                            security.visible = model.Id === "security"
                         }
                     }
                 }
@@ -186,16 +136,5 @@ Window {
     Component.onCompleted: {
         securityCamera.play()
     }
-
-    function musicControls() {
-        toggleMusic = !toggleMusic
-        if(toggleMusic) {
-            musicControlIcon = "pause.png"
-        }
-        else {
-            musicControlIcon = "play_arrow.png"
-        }
-    }
-
 }
 
