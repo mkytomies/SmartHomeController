@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Rectangle {
     id: locksController
+    anchors.centerIn: parent
     width: 540
     height: 245
     color: "transparent"

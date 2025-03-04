@@ -7,8 +7,6 @@ Rectangle {
     radius: 10
     color: "#5c5b5b"
 
-    property string selected: "ArmStatusController.qml"
-
     Text {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -19,12 +17,14 @@ Rectangle {
         text: "Security"
     }
 
-    Loader {
-        anchors.centerIn: parent
-        width: parent.width * 0.75
-        height: 245
-        active: true
-        source: selected
+    ArmStatusController {
+        id: armStatus
+        visible: true
+    }
+
+    LocksController {
+        id: locks
+        visible: false
     }
 
     Row {
@@ -36,8 +36,8 @@ Rectangle {
 
         Repeater {
             model: ListModel {
-                ListElement { name: "Arm status"; image: "bell.png"; source: "ArmStatusController.qml" }
-                ListElement { name: "Locks"; image: "lock.png"; source: "LocksController.qml" }
+                ListElement { Id: "armStatus"; name: "Arm status"; image: "bell.png"; source: "ArmStatusController.qml" }
+                ListElement { Id: "locks"; name: "Locks"; image: "lock.png"; source: "LocksController.qml" }
             }
 
             delegate: Column {
@@ -61,7 +61,8 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        selected = model.source
+                        armStatus.visible = model.Id === "armStatus"
+                        locks.visible = model.Id === "locks"
                     }
                 }
             }

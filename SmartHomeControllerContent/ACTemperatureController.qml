@@ -3,6 +3,7 @@ import QtQuick.Controls
 
 Control {
     id: temperatureController
+    anchors.centerIn: parent
     width: 260
     height: 260
 

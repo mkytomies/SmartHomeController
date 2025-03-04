@@ -24,7 +24,7 @@ Rectangle {
                 y: 30
                 font.pixelSize: 24
                 color: "White"
-                text: "Lightning"
+                text: "Lighting"
             }
 
             ColorController {
