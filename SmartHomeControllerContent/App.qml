@@ -31,9 +31,7 @@ Window {
 
                 WeatherDisplay {}
 
-                MusicPlayer {
-
-                }
+                MusicPlayer {}
             }
 
             Rectangle {
@@ -67,25 +65,7 @@ Window {
             height: 197
             spacing: 30
 
-            Rectangle {
-                width: 350
-                height: 197
-                radius: 10
-                color: "Transparent"
-
-                MediaPlayer {
-                    id: securityCamera
-                    audioOutput: AudioOutput {}
-                    videoOutput: videoOutput
-                    loops: MediaPlayer.Infinite
-                    source: "security-camera-placeholder.mp4"
-                }
-
-                VideoOutput {
-                    id: videoOutput
-                    anchors.fill: parent
-                }
-            }
+            SecurityCamera {}
 
             Repeater {
                 model: ListModel {
@@ -131,10 +111,6 @@ Window {
                 }
             }
         }
-    }
-
-    Component.onCompleted: {
-        securityCamera.play()
     }
 }
 
