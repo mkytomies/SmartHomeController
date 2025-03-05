@@ -122,7 +122,6 @@ Rectangle {
         httpRequest.open("GET", url);
         httpRequest.onreadystatechange = function() {
             if(httpRequest.readyState === XMLHttpRequest.DONE) {
-                console.log(httpRequest.status)
                 if(httpRequest.status === 200) {
                     const response = JSON.parse(httpRequest.responseText);
                     city = response.name
