@@ -8,7 +8,7 @@ Rectangle {
     radius: 10
     color: "transparent"
 
-    property string city: "helsinki"
+    property string city: "Helsinki"
     property string weatherIcon: ""
     property double windSpeed: 0
     property double temperature: 0
@@ -29,14 +29,38 @@ Rectangle {
             text: Qt.formatDateTime(new Date(), "dd/MM/yyyy")
         }
 
-        Text {
+        TextField {
+            id: selectedCity
             anchors.top: todaysDate.bottom
             anchors.left: parent.left
             anchors.topMargin: 5
-            anchors.leftMargin: 20
+            anchors.leftMargin: 10
+            background: Rectangle {
+                implicitWidth: 180
+                implicitHeight: 24
+                border.width: 0
+                color: "transparent"
+            }
             font.pixelSize: 16
             color: "white"
-            text: city
+            placeholderTextColor: "white"
+            placeholderText: city
+
+            TapHandler {
+                onTapped: {
+                    selectedCity.placeholderText = ""
+                }
+            }
+
+            onEditingFinished: {
+                if (text === "") {
+                    text = city
+                } else {
+                    text = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase()
+                    city = text
+                    fetchWeatherData(city)
+                }
+            }
         }
 
         Row {
@@ -89,26 +113,31 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        fetchWeatherData()
+        fetchWeatherData(city)
     }
 
-    function fetchWeatherData() {
-        const url = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=6c433438776b5be4ac86001dc88de74d"
+    function fetchWeatherData(city) {
+        const url = "https://api.openweathermap.org/data/2.5/weather?q=" + city.toLowerCase() + "&units=metric&appid=6c433438776b5be4ac86001dc88de74d"
         const httpRequest = new XMLHttpRequest();
         httpRequest.open("GET", url);
         httpRequest.onreadystatechange = function() {
             if(httpRequest.readyState === XMLHttpRequest.DONE) {
+                console.log(httpRequest.status)
                 if(httpRequest.status === 200) {
                     const response = JSON.parse(httpRequest.responseText);
                     city = response.name
                     weatherIcon = response.weather[0].icon
                     temperature = response.main.temp
-                    windSpeed = response.wind.speed
+                    windSpeedText.text = response.wind.speed + "m/s"
                 }
-            }
-            else {
-                windSpeed = "Error while loading..."
-            }
+                else if(httpRequest.status === 404) {
+                    temperature = 0
+                    windSpeedText.text = "Not found"
+                }
+                else {
+                    windSpeedText.text = "Error while loading..."
+                }
+            } 
         }
         httpRequest.send();
     }
