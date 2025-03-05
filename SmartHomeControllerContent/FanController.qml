@@ -5,8 +5,8 @@ Rectangle {
     id: fanController
     anchors.centerIn: parent
     width: 260
-    height: 245
-    color: "#5c5b5b"
+    height: 260
+    color: "transparent"
 
     property int fanSpeed: 0
     property int ringRadius: 110

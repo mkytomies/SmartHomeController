@@ -6,7 +6,7 @@ Rectangle {
     anchors.centerIn: parent
     width: 260
     height: 245
-    color: "#5c5b5b"
+    color: "transparent"
 
     property int selectedMinutes: 0
     property int selectedHours: 0
