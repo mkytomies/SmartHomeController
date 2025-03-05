@@ -8,6 +8,7 @@ Rectangle {
     color: "#5c5b5b"
 
     property bool acStatus: true
+    property int selectedSetting: 0
 
     Row {
         width: parent.width
@@ -56,17 +57,17 @@ Rectangle {
 
         ACTemperatureController {
             id: temperature
-            visible: true
+            visible: settings.get(selectedSetting).name === "Temperature"
         }
 
         FanController {
             id: fan
-            visible: false
+            visible: settings.get(selectedSetting).name === "Fan"
         }
 
         ACTimerController {
             id: timer
-            visible: false
+            visible: settings.get(selectedSetting).name === "Timer"
 
             onVisibleChanged: {
                 timerStarted.connect(function() {
@@ -80,7 +81,7 @@ Rectangle {
 
         ACModeController {
             id: mode
-            visible: false
+            visible: settings.get(selectedSetting).name === "Mode"
         }
     }
 
@@ -93,10 +94,12 @@ Rectangle {
 
         Repeater {
             model: ListModel {
-                ListElement { name: "Temperature"; image: "thermostat.png"; source: "ACTemperatureController.qml" }
-                ListElement { name: "Fan"; image: "fan.png"; source: "FanController.qml" }
-                ListElement { name: "Timer"; image: "clock.png"; source: "ACTimerController.qml" }
-                ListElement { name: "Mode"; image: "bright.png"; source: "ACModeController.qml" }
+                id: settings
+
+                ListElement { Id: 0; name: "Temperature"; image: "thermostat.png"; source: "ACTemperatureController.qml" }
+                ListElement { Id: 1; name: "Fan"; image: "fan.png"; source: "FanController.qml" }
+                ListElement { Id: 2; name: "Timer"; image: "clock.png"; source: "ACTimerController.qml" }
+                ListElement { Id: 3; name: "Mode"; image: "bright.png"; source: "ACModeController.qml" }
             }
 
             delegate: Column {
@@ -114,6 +117,7 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     font.pixelSize: 14
+                    font.bold: selectedSetting === model.Id
                     color: "white"
                     text: model.name
                 }
@@ -121,10 +125,7 @@ Rectangle {
                 MouseArea {
                     anchors.fill: parent
                     onClicked: {
-                        temperature.visible = model.name.toLowerCase() === "temperature"
-                        fan.visible = model.name.toLowerCase() === "fan"
-                        timer.visible = model.name.toLowerCase() === "timer"
-                        mode.visible = model.name.toLowerCase() === "mode"
+                        selectedSetting = model.Id
                     }
                 }
             }

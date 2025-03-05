@@ -7,6 +7,8 @@ Rectangle {
     radius: 10
     color: "#5c5b5b"
 
+    property int  selectedSetting: 0
+
     Text {
         anchors.top: parent.top
         anchors.left: parent.left
@@ -19,12 +21,12 @@ Rectangle {
 
     ArmStatusController {
         id: armStatus
-        visible: true
+        visible: securitySettings.get(selectedSetting).name === "Arm status"
     }
 
     LocksController {
         id: locks
-        visible: false
+        visible: securitySettings.get(selectedSetting).name === "Locks"
     }
 
     Row {
@@ -33,16 +35,20 @@ Rectangle {
         anchors.margins: 10
         width: 260
         height: 55
+        spacing: 10
 
         Repeater {
             model: ListModel {
-                ListElement { Id: "armStatus"; name: "Arm status"; image: "bell.png"; source: "ArmStatusController.qml" }
-                ListElement { Id: "locks"; name: "Locks"; image: "lock.png"; source: "LocksController.qml" }
+                id: securitySettings
+
+                ListElement { Id: 0; name: "Arm status"; image: "bell.png"; source: "ArmStatusController.qml" }
+                ListElement { Id: 1; name: "Locks"; image: "lock.png"; source: "LocksController.qml" }
             }
 
             delegate: Column {
                 width: parent.width / 2
                 height: parent.height
+                spacing: 1
 
                 Image {
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -54,15 +60,16 @@ Rectangle {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
                     font.pixelSize: 14
+                    font.bold: selectedSetting === model.Id
                     color: "white"
                     text: model.name
                 }
 
                 MouseArea {
                     anchors.fill: parent
+                    z: 1
                     onClicked: {
-                        armStatus.visible = model.Id === "armStatus"
-                        locks.visible = model.Id === "locks"
+                        selectedSetting = model.Id
                     }
                 }
             }

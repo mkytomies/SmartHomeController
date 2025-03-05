@@ -146,7 +146,7 @@ Rectangle {
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         font.pixelSize: 14
-                        font.bold: (selectedLight === model.Id ? true : false)
+                        font.bold: selectedLight === model.Id
                         color: "white"
                         text: model.name
                     }
